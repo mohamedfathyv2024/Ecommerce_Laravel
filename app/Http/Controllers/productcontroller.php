@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\Product;
+
 class productcontroller extends Controller
 {
     /**
@@ -12,10 +14,10 @@ class productcontroller extends Controller
      */
     public function index()
     {
-        $products=DB::table("products")->get()->toarray();
-        echo "<pre>";
-        print_r($products);
-        echo "</pre>";
+        Product::get()->toarray();
+        // echo "<pre>";
+        // print_r($products);
+        // echo "</pre>";
     }
 
     /**
@@ -33,7 +35,7 @@ class productcontroller extends Controller
     public function store(Request $request)
     {
         $name=$request->name;
-        DB::table("products")->insert(["product"=>$name]);
+        Product::create(["size"=>$name]);
         echo "added";
     }
 
@@ -42,7 +44,7 @@ class productcontroller extends Controller
      */
     public function show(string $id)
     {
-        $products=db::table("products")->where("id",$id)->first();  // db or DB both are correct
+        Product::where("id",$id)->first();  // db or DB both are correct
         echo "<pre>";
         print_r($products);
         echo "</pre>";
@@ -57,7 +59,7 @@ class productcontroller extends Controller
     {
         echo "<h1 style='color:blue;'>EDIT PAGE</h1>";  // if you made return the code will stop and form will not appear 
         
-        $products=DB::table("products")->where("id",$id)->first();
+        Product::where("id",$id)->first();
 
         return view("edit",compact("products"));
     }
@@ -68,7 +70,7 @@ class productcontroller extends Controller
     public function update(Request $request, string $id)
     {   
         $name=$request->name;
-        DB::table("products")->where("id",$id)->update(["product"=>$name]);
+        Product::where("id",$id)->update(["product"=>$name]);
         echo "update : $id";
     }
 
@@ -79,10 +81,10 @@ class productcontroller extends Controller
 
     {
         // $name=$request->name;
-        $products=DB::table("products")->where("id",$id)->first();
+        Product::where("id",$id)->first();
         echo "the product is :".$products->id;
         echo view("edit",compact("products"));
-        $products=DB::table("products")->where("id",$id)->delete();
+        Product::where("id",$id)->delete();
         if($products){
             echo "deleted";
         }
